@@ -1,5 +1,6 @@
 ####Setup:
-    please change your ip-address in docker-compose.yml :
+    
+    Please change your ip-address in docker-compose.yml :
     KAFKA_ADVERTISED_HOST_NAME: <your ip address>
     
     docker-compose up -> to start the 2 containers with a kafka q container
