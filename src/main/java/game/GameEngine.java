@@ -1,16 +1,18 @@
 package game;
 
+import jdk.nashorn.internal.runtime.options.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class GameEngine {
 
-    private GameState myState;
     private LinkedList<Move> movesLog = new LinkedList<>();
-
     private static final Logger logger = LoggerFactory.getLogger(GameEngine.class);
+
+    private GameState myState;
     private String myPlayer;
     private String opponent;
 
@@ -21,22 +23,30 @@ public class GameEngine {
         movesLog.add(new Move(myPlayer,initMove));
         myState = GameState.WAITING_FOR_START;
     }
-    public int playMove(int opponentMove){
+    public Optional<Integer> playMove(int opponentMove){
         if(myState == GameState.HANSHAKE_FINISHED && verifyMove(opponentMove))
             myState = GameState.GAME_STARTED;
 
         if(isWinner(opponentMove)){
             myState = GameState.GAME_OVER;
-            return 1;
+            return Optional.of(1);
         }
         int nextMove ;
         switch (myState) {
             case WAITING_FOR_START:
-                nextMove = continueHandShake(opponentMove);
-                myState = GameState.HANSHAKE_FINISHED;
+                if(continueHandShake(opponentMove)){
+                    myState = GameState.GAME_STARTED;
+                    nextMove = movesLog.getLast().move;
+                }
+                else{
+                    myState = GameState.HANSHAKE_FINISHED;
+                    return Optional.empty();
+                }
                 break;
             case GAME_STARTED:
                 nextMove = play(opponentMove);
+                logger.info("[ONGOING-GAME] I am playing: "+nextMove);
+
                 if (isWinner(nextMove)) {
                     logger.info("I won the game!!! Hurray!!");
                     myState = GameState.WINNER;
@@ -47,7 +57,7 @@ public class GameEngine {
         }
         updateLogs(opponent,opponentMove);
         updateLogs(myPlayer,nextMove);
-        return nextMove;
+        return Optional.of(nextMove);
     }
 
     private boolean isWinner(int move){
@@ -55,17 +65,17 @@ public class GameEngine {
     }
 
     private void updateLogs(String player, int move){
-        logger.info("Player: "+player+" moved: "+move);
+        logger.info("[Storing the moves] Player: "+player+" moved: "+move);
         this.movesLog.add(new Move(player,move));
     }
-    private int continueHandShake(int n){
+    private boolean continueHandShake(int n){
         int prevMove = movesLog.getLast().move;
         if(prevMove > n){
             logger.info("I am starting the game while I am the one that starts");
-            return prevMove;
+            return true;
         }else{
             logger.info("The opponent should start the game");
-            return n;
+            return false;
         }
     }
 

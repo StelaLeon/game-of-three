@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.util.Optional;
+
 @Configuration
 @EnableConfigurationProperties(ConfigurationProvider.class)
 @Component
@@ -63,8 +65,12 @@ public class KafkaGameController {
 
         logger.info("[Play] Received Message in group: " + message);
         if(gameEngine.getMyState() != GameState.WINNER
-                && gameEngine.getMyState() != GameState.GAME_OVER)
-            gameEngine.playMove(m);
+                && gameEngine.getMyState() != GameState.GAME_OVER){
+            Optional<Integer> nextMove = gameEngine.playMove(m);
+            if(nextMove.isPresent()){
+                sendMessage(nextMove.get().toString(),configurationProvider.getOpponentTopic());
+            }
+        }
         else
             logger.error("The game is already finished");
     }
