@@ -15,10 +15,11 @@ services:
     environment:
       KAFKA_BROKER_ID: 12
       KAFKA_CREATE_TOPICS: "Toom-the-boom:1:1,Jack-attack:1:1" # topic:partition:replicas
-      KAFKA_ADVERTISED_HOST_NAME: 192.168.178.85 # docker-machine
+      KAFKA_ADVERTISED_HOST_NAME: <???? your ip here????> # docker-machine
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_PORT: 9092
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
     depends_on:
       - "zookeeper"
 

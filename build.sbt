@@ -22,12 +22,10 @@ libraryDependencies ++= Seq(
   "org.junit.platform" % "junit-platform-runner" % "1.6.0-M1" % Test,
   "org.junit.jupiter" % "junit-jupiter-engine" % "5.6.0-M1" % Test,
   "org.springframework.kafka" % "spring-kafka" % "2.3.3.RELEASE",
-  "org.apache.kafka" % "kafka-streams" % "2.3.1" ,
-  "org.apache.kafka" % "kafka-clients" % "2.3.1"
+  "org.springframework.kafka" % "spring-kafka-test" % "2.3.2.RELEASE" % Test
 
 )
 
-//@todo fix/clean this
 // Include only src/main/java in the compile configuration
 //unmanagedSourceDirectories in Compile := (javaSource in Compile).value :: Nil
 
@@ -43,10 +41,4 @@ val cleanUp = taskKey[Unit]("Clean after the game has ended...")
 
 buildContainer := {
   publishLocal.value
-}
-
-startPlayer1 := {
-  buildContainer.value
-
-  ""
 }

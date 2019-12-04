@@ -26,12 +26,10 @@ public class GameController {
     @GetMapping("/status")
     @ResponseBody
     public String status(){
-        return String.join("\n \n",gameEngine
+        return String.join("\n",gameEngine
                 .getMovesLog()
                 .stream()
                 .map(GameEngine.Move::toString).collect(Collectors.toList()));
     }
-
-
 
 }
