@@ -1,0 +1,49 @@
+version: "2"
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+    hostname: zookeeper
+  kafka:
+    image: wurstmeister/kafka
+    command: [start-kafka.sh]
+    privileged: true
+    ports:
+      - "9092:9092"
+    hostname: kafka
+    environment:
+      KAFKA_BROKER_ID: 12
+      KAFKA_CREATE_TOPICS: "Toom-the-boom:1:1,Jack-attack:1:1" # topic:partition:replicas
+      KAFKA_ADVERTISED_HOST_NAME: 192.168.178.85 # docker-machine
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    depends_on:
+      - "zookeeper"
+
+  game-of-three-player1:
+      image: game-of-three:1.0
+      privileged: true
+      ports:
+        - 8080:8080
+      environment:
+        player-name: "Jackie"
+        player-topic: "Jack-attack"
+        opponent-topic: "Toom-the-boom"
+        opponent-name: "Tommy"
+      depends_on:
+        - "kafka"
+
+  game-of-three-player2:
+      image: game-of-three:1.0
+      privileged: true
+      ports:
+        - 8081:8080
+      environment:
+        player-name: "Tommy"
+        player-topic: "Toom-the-boom"
+        opponent-topic: "Jack-attack"
+        opponent-name: "Jackie"
+      depends_on:
+        - "kafka"
