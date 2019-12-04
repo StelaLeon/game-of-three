@@ -1,11 +1,8 @@
-####Setup:
-    
+#### Setup:   
     Please change your ip-address in docker-compose.yml :
     KAFKA_ADVERTISED_HOST_NAME: <your ip address>
-    
     docker-compose up -> to start the 2 containers with a kafka q container
     docker-compose down -> should tear down the cluster
-    
     You can always connect on (obviously if you don;t run it on localhost, then set up the ip of the place you;re running it) localhost:8080/status and localhost:8081/status from your browser to check the status of your game, you will receive a list of player's moves(basically the whole game log)
     
     
