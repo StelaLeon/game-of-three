@@ -17,7 +17,7 @@ The motivation behind is to implement a simple game of three on top of the jvm.
     3.
     Design the GameEngine class into: a tree of States interpreted by a driver class: in order to avoid state transition we can only follow the tree to follow the possibility: a more functional programming way of doing it, the limitation is the control to the lifecycle of the bean. 
     
-####Possible improvements that would change the nature of the game:
+#### Possible improvements that would change the nature of the game:
     1.
     For local testing my intention was to develop a small simple plugins in order to run your integration tests in 1 click:
     syncronization of tasks {e.g. first you pull up the microsystem of services then you run your it against it} 
@@ -38,19 +38,19 @@ The motivation behind is to implement a simple game of three on top of the jvm.
 
 #### Why we building it and how -> Random thoughts 
 the motivation behind it might compensate for lack of requirements.
-######Scenario1 
+###### Scenario1 
 we build a game engine so what one connects and play against it 
 which means different code base and 2 different services
 I would have choosen an actor based solution. 
 
-######Scenario2:
+###### Scenario2:
 We build individual services that compete against each other with descentralised system.
 This is simpler but pretty heavy weight: every time one wants to play a game a new container is needed:
 all boils down to how loaded your service is. 
 
 I choose Scenario2, as per requirements.
 
-###Why the tech-stack:
+### Why the tech-stack:
 
 SBT motivation: as a more compact way, better possibilities and better usability that maven,
 yet longer startups with eventual better parallelism of the tasks defined from that point on.
