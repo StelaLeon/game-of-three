@@ -3,7 +3,7 @@ package kafka;
 
 import game.ConfigurationProvider;
 import game.GameEngine;
-import game.GameState;
+import game.GameEngineFactory;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +43,7 @@ public class KafkaGameController {
                 Integer.valueOf(initMove).toString(),
                 configurationProvider.getOpponentTopic()
         );
-        this.gameEngine =  new GameEngine(
-                configurationProvider.getPlayerName(),
-                configurationProvider.getOpponentName(),
-                initMove
-        );
+        this.gameEngine = GameEngineFactory.getInstance().startAGame(initMove,configurationProvider.getPlayerName(), configurationProvider.getOpponentName());
         return this.gameEngine;
     }
 
@@ -57,22 +53,15 @@ public class KafkaGameController {
         int m = Integer.valueOf(message);
 
         if(this.gameEngine == null)
-            this.gameEngine = new GameEngine(
-                    configurationProvider.getPlayerName(),
-                    configurationProvider.getOpponentName(),
-                    m
-            );
+            this.gameEngine = GameEngineFactory.getInstance().startAGame(m, configurationProvider.getPlayerName(), configurationProvider.getOpponentName());
 
         logger.info("[Play] Received Message in group: " + message);
-        if(gameEngine.getMyState() != GameState.WINNER
-                && gameEngine.getMyState() != GameState.GAME_OVER){
-            Optional<Integer> nextMove = gameEngine.playMove(m);
-            if(nextMove.isPresent()){
-                sendMessage(nextMove.get().toString(),configurationProvider.getOpponentTopic());
-            }
+        Optional<Integer> nextMove = gameEngine.playMove(m);
+        if(nextMove.isPresent()){
+            sendMessage(nextMove.get().toString(),configurationProvider.getOpponentTopic());
         }
         else
-            logger.error("The game is already finished");
+            logger.error("The game was paused");
     }
 
     @Bean

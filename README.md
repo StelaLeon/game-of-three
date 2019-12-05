@@ -1,4 +1,5 @@
 #### Setup:   
+    To build a docker container: sbt docker:publishLocal this will build a docker container and publish it in your local repo without pushing it to dockerhub.
     Please change your ip-address in docker-compose.yml :
     KAFKA_ADVERTISED_HOST_NAME: <your ip address>
     docker-compose up -> to start the 2 containers with a kafka q container

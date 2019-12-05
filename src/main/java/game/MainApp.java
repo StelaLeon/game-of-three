@@ -14,9 +14,6 @@ public class MainApp {
     @Autowired
     KafkaGameController gameController;
 
-    @Autowired
-    GameEngine gameEngine;
-
     public static void main(String[] args) {
         SpringApplication.run(MainApp.class, args);
     }

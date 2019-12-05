@@ -23,6 +23,9 @@ public class GameEngine {
         myState = GameState.WAITING_FOR_START;
     }
     public Optional<Integer> playMove(int opponentMove){
+        if(myState == GameState.GAME_OVER || myState == GameState.WINNER)
+            return Optional.empty();
+
         if(myState == GameState.HANSHAKE_FINISHED && verifyMove(opponentMove))
             myState = GameState.GAME_STARTED;
 
